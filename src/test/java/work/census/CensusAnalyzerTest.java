@@ -48,8 +48,7 @@ public class CensusAnalyzerTest {
 	}
 
 	@Test
-	public void given_IndiaCensusData_WithCorrectFile_ButWrongDelimiter_ShoulThrewException()
-			throws IOException, CsvValidationException {
+	public void given_IndiaCensusData_WithCorrectFile_ButWrongDelimiter_ShoulThrewException() throws IOException, CsvValidationException {
 		try {
 			CensusAnalyzer censusAnalyZer = new CensusAnalyzer();
 			ExpectedException exceptionRule = ExpectedException.none();
@@ -89,6 +88,18 @@ public class CensusAnalyzerTest {
 			statecodeAnalyZer.loadDataFromCSVFile(WRONG_STATE_CODE_FILE_TYPE_PATH);
 		} catch (CensusAnalyzerException e) {
 			Assert.assertEquals(CensusAnalyzerException.ExceptionType.CENSUS_FILE_PROBLEM, e.type);
+		}
+	}
+
+	@Test
+	public void given_StateCodesData_WithCorrectFile_ButWrongDelimiter_ShoulThrewException() throws IOException {
+		try {
+			CensusAnalyzer statecodeAnalyzer = new CensusAnalyzer();
+			ExpectedException exceptionRule = ExpectedException.none();
+			exceptionRule.expect(IOException.class);
+			statecodeAnalyzer.loadDataFromCSVFile(INDIAN_STATE_CODE_CSV_FILE_PATH);
+		} catch (CensusAnalyzerException e) {
+			Assert.assertEquals(CensusAnalyzerException.ExceptionType.UNABLE_TO_PARSE, e.type);
 		}
 	}
 }
