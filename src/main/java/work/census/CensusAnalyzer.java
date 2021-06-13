@@ -1,5 +1,7 @@
 package work.census;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.Files;
@@ -7,8 +9,11 @@ import java.nio.file.Paths;
 import java.util.Iterator;
 import java.util.stream.StreamSupport;
 
+import com.opencsv.CSVReader;
+import com.opencsv.CSVReaderBuilder;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
+import com.opencsv.exceptions.CsvValidationException;
 
 public class CensusAnalyzer {
 	public int loadIndiaCensusData(String csvFilePath) throws IOException, CensusAnalyzerException {
@@ -29,4 +34,21 @@ public class CensusAnalyzer {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
+	public boolean loadIndiaCensusDataFile(String csvFilePath)
+			throws FileNotFoundException, IOException, CensusAnalyzerException, CsvValidationException {
+		CSVReader reader = null;
+		try {
+			reader = new CSVReader(new FileReader(csvFilePath));
+			String[] nextLine;
+			while ((nextLine = reader.readNext()) != null) {
+				return true;
+			}
+			reader.close();
+
+		} catch (IllegalStateException e) {
+			throw new CensusAnalyzerException(e.getMessage(), CensusAnalyzerException.ExceptionType.UNABLE_TO_PARSE);
+		}
+		return false;
+	}
 }
